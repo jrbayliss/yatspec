@@ -36,16 +36,24 @@ public class StateExtractorsTest {
         assertThat(StateExtractors.<Collection<String>, String>getValues(KEY, String.class).execute(inputAndOutputs), hasItem(NAME));
     }
 
+    //TODO why not use jsoup?
+    //or Maven?
+    //or use gradle test runner
     @Test
     public void shouldExtractXpathElement() throws Exception {
-        Document document =  document("<People><Person><Name>" + NAME + "</Name></Person></People>");
+        Document document = document("<People><Person><Name>" + NAME + "</Name></Person></People>");
         CapturedInputAndOutputs inputAndOutputs = new CapturedInputAndOutputs().add(KEY, document);
-        assertThat(getXpathValue(KEY, "//People/Person/Name").execute(inputAndOutputs), is(NAME));
+        assertThat(
+            getXpathValue(KEY, "//People/Person/Name")
+            .execute(
+                inputAndOutputs
+            ),
+            is(NAME));
     }
 
     @Test
     public void shouldExtractMultipleSiblingXPathElements() throws Exception {
-        Document document =  document("<People><Person>"+"<Name>" + NAME + "</Name>"+"<Name>" + ANOTHER_NAME + "</Name>"+"</Person></People>");
+        Document document = document("<People><Person>"+"<Name>" + NAME + "</Name>"+"<Name>" + ANOTHER_NAME + "</Name>"+"</Person></People>");
         CapturedInputAndOutputs inputAndOutputs = new CapturedInputAndOutputs().add(KEY, document);
         assertThat(StateExtractors.getXpathValues(KEY, "//People/Person/Name").execute(inputAndOutputs), is(asList(NAME, ANOTHER_NAME)));
     }

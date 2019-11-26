@@ -53,7 +53,7 @@ public class SpecRunnerTest {
         specRunner.run(notifier);
 
         String standardOut = standardOutStream.toString();
-        assertThat(standardOut,not(containsString("Exception")));
+        assertThat(standardOut, not(containsString("Exception")));
     }
 
     public static class IgnoredTest {

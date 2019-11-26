@@ -1,5 +1,8 @@
 package com.googlecode.yatspec.state;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @SuppressWarnings({"unused"})
 public class LogKey {
     private final String value;
@@ -22,6 +25,8 @@ public class LogKey {
         if (o == null || getClass() != o.getClass()) return false;
 
         LogKey logKey = (LogKey) o;
+
+        Set s = new HashSet();
 
         return value.equals(logKey.value);
 

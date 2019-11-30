@@ -3,14 +3,18 @@ package com.googlecode.yatspec.parsing;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Strings;
 import com.googlecode.totallylazy.regex.Regex;
+import com.googlecode.yatspec.rendering.FileLoader;
 
+import java.io.IOException;
+import java.util.Scanner;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
 import static com.googlecode.totallylazy.regex.Regex.regex;
 
 public class Text {
-    private static final Regex wordDelimiter = Regex.regex(Strings.toString(Text.class.getResourceAsStream("wordDelimiter.regex")));
+    private static final FileLoader fileLoader = new FileLoader();
+    private static final Regex wordDelimiter = Regex.regex(fileLoader.loadFile("yatspec/parsing/wordDelimiter.regex"));
     private static final Pattern spaceRemover = Pattern.compile("(?<!^)[\\t\\x0B\\f ]+"); // don't replace new lines
     private static final Regex quotedStrings = regex("\"[^\"]+\"");
 

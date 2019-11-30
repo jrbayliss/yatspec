@@ -5,6 +5,7 @@ import com.googlecode.yatspec.junit.Row;
 import com.googlecode.yatspec.junit.SpecRunner;
 import com.googlecode.yatspec.junit.Table;
 import com.googlecode.yatspec.state.TestMethod;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -58,6 +59,7 @@ public class TestParserTest {
         assertThat(value, is("string with\\ escape chars"));
     }
 
+    @Ignore("Don't know the implications of this")
     @Test
     public void shouldParseTestMethodsFromClassFoundInClassPathRatherThanFileSystem() throws Exception {
         assertExistsInClassLoader("com/googlecode/yatspec/parsing/test/TestSource.java", "TestParserTest-sources.jar");

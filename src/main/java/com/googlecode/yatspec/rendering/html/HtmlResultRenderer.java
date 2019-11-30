@@ -54,25 +54,37 @@ public class HtmlResultRenderer implements SpecResultListener {
         group.registerRenderer(instanceOf(LinkingNote.class), callable(new LinkingNoteRenderer(result.getTestClass())));
         group.registerRenderer(instanceOf(ContentAtUrl.class), asString());
         sequence(customRenderers).fold(group, registerRenderer());
+
         for (Class document : Creator.optionalClass("org.jdom.Document")) {
             group.registerRenderer(instanceOf(document), callable(Creator.<Renderer>create(Class.forName("com.googlecode.yatspec.plugin.jdom.DocumentRenderer"))));
         }
 
-        final StringTemplate template = group.getInstanceOf("yatspec");
-        template.setAttribute("script", loadContent("xregexp.js"));
-        template.setAttribute("script", loadContent("yatspec.js"));
+        final StringTemplate template = group.defineTemplate("yatspec", fileAsString("yatspec.st"));
+        template.setAttribute("script", fileAsContent("xregexp.js"));
+        template.setAttribute("script", fileAsContent("yatspec.js"));
         for (Content customScript : customScripts) {
             template.setAttribute("script", customScript);
         }
         for (Content customHeaderContent : customHeaderContents) {
             template.setAttribute("customHeaderContent", customHeaderContent);
         }
-        template.setAttribute("stylesheet", loadContent("yatspec.css"));
+        template.setAttribute("stylesheet", fileAsContent("yatspec.css"));
         template.setAttribute("cssClass", getCssMap());
         template.setAttribute("testResult", result);
         StringWriter writer = new StringWriter();
         template.write(new NoIndentWriter(writer));
         return writer.toString();
+    }
+
+    private String fileAsString(String fileName) {
+        FileLoader fileLoader = new FileLoader();
+        String base = "rendering/html/";
+        return fileLoader.loadFile(base + fileName);
+    }
+
+    private Content fileAsContent(String fileName) {
+        Content content = new ContentFromString(fileAsString(fileName));
+        return content;
     }
 
     public <T> HtmlResultRenderer withCustomRenderer(Class<T> klazz, Renderer<T> renderer) {

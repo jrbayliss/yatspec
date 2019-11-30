@@ -8,6 +8,7 @@ import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecResultListener;
 import com.googlecode.yatspec.parsing.Files;
 import com.googlecode.yatspec.parsing.JavaSource;
+import com.googlecode.yatspec.rendering.FileLoader;
 import com.googlecode.yatspec.rendering.NotesRenderer;
 import com.googlecode.yatspec.rendering.Renderer;
 import com.googlecode.yatspec.state.Result;
@@ -19,8 +20,6 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.googlecode.totallylazy.Callables.asString;
-import static com.googlecode.totallylazy.Maps.entries;
 import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.parsing.Files.overwrite;
@@ -39,11 +38,17 @@ public class WikiResultRenderer implements SpecResultListener {
         sequence(customRenderers).fold(group, registerRenderer());
         group.registerRenderer(instanceOf(JavaSource.class), callable(new JavaSourceRenderer()));
         group.registerRenderer(instanceOf(Notes.class), callable(new NotesRenderer()));
-        final StringTemplate template = group.getInstanceOf("wiki");
+        final StringTemplate template = new StringTemplate(fileAsString("wiki.st"));
         template.setAttribute("testResult", result);
         StringWriter writer = new StringWriter();
         template.write(new NoIndentWriter(writer));
         return writer.toString();
+    }
+
+    private String fileAsString(String fileName) {
+        FileLoader fileLoader = new FileLoader();
+        String base = "rendering/wiki/";
+        return fileLoader.loadFile(base + fileName);
     }
 
     public <T> WikiResultRenderer withCustomRenderer(Class<T> klazz, Renderer<T> renderer){

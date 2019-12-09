@@ -47,7 +47,8 @@ public class HtmlResultRenderer implements SpecResultListener {
 
     public String render(Result result) throws Exception {
         final EnhancedStringTemplateGroup group = new EnhancedStringTemplateGroup(getClass());
-        group.registerRenderer(always().and(not(instanceOf(Number.class))), Xml.escape());
+        // TODO what is this doing? it changes " to &quot;
+//        group.registerRenderer(always().and(not(instanceOf(Number.class))), Xml.escape());
         group.registerRenderer(instanceOf(ScenarioTableHeader.class), callable(new ScenarioTableHeaderRenderer()));
         group.registerRenderer(instanceOf(JavaSource.class), callable(new JavaSourceRenderer()));
         group.registerRenderer(instanceOf(Notes.class), callable(new NotesRenderer()));

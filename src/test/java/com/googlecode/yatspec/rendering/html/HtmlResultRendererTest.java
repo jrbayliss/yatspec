@@ -58,6 +58,12 @@ public class HtmlResultRendererTest {
         assertThat(html, containsString(content.toString()));
     }
 
+    /**
+     * with the following line uncommented out group.registerRenderer(always().and(not(instanceOf(Number.class))), Xml.escape());
+     *
+     * we get &quot;blah&quot; instead of "blah"
+     * assertThat(html, containsString("var something = &quot;blah&quot;;"));
+     */
     @Test
     public void supportsCustomJavaScript() throws Exception {
         TestResult result = new TestResult(getClass());
@@ -67,10 +73,7 @@ public class HtmlResultRendererTest {
                 withCustomScripts(content).
                 render(result);
 
-        //TODO the html format - new lines indents are not correct
-        //TODO var something = "blah"; was escaped to var something = &quot;blah&quot;;
-        //assertThat(html, containsString(content.toString()));
-        assertThat(html, containsString("var something = &quot;blah&quot;;"));
+        assertThat(html, containsString(content.toString()));
     }
 
     private TestResult aTestResultWithCustomRenderTypeAddedToScenarioLogs() throws Exception {
